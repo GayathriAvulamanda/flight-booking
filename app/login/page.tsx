@@ -1,66 +1,138 @@
 "use client";
-
-import { useRouter } from "next/navigation";
 import { useState } from "react";
 
 export default function LoginPage() {
-  const router = useRouter();
-
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
-  const handleLogin = () => {
-    // simple validation
+  const handleLogin = (e: any) => {
+    e.preventDefault();
+
     if (!email || !password) {
       alert("Please enter email and password");
       return;
     }
 
-    // demo login (hardcoded)
-    if (email === "admin@gmail.com" && password === "1234") {
-      router.push("/dashboard");
-    } else {
-      alert("Invalid credentials");
+    if (password.length < 6) {
+      alert("Password must be at least 6 characters");
+      return;
     }
+
+    alert("Login Successful ✅");
   };
 
   return (
-    <div className="flex min-h-screen items-center justify-center">
-      <div className="border p-6 rounded w-80 text-center">
-        <h1 className="text-xl font-bold mb-4">Flight Login ✈️</h1>
+    <div style={styles.container}>
+      {/* Overlay */}
+      <div style={styles.overlay}></div>
 
-        <input
-          type="email"
-          placeholder="Email"
-          className="w-full p-2 border mb-2"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-        />
+      {/* Login Box */}
+      <div style={styles.box}>
+        <h2 style={styles.title}>✈️ Flight Login</h2>
 
-        <input
-          type="password"
-          placeholder="Password"
-          className="w-full p-2 border mb-2"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-        />
+        <form onSubmit={handleLogin} style={styles.form}>
+          {/* Email */}
+          <input
+            type="email"
+            placeholder="Enter Email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            style={styles.input}
+          />
 
-        <div className="flex items-center mb-2">
-          <input type="checkbox" />
-          <span className="ml-2 text-sm">Remember me</span>
-        </div>
+          {/* Password */}
+          <input
+            type="password"
+            placeholder="Enter Password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            style={styles.input}
+          />
 
-        <button
-          onClick={handleLogin}
-          className="w-full bg-blue-500 text-white p-2 rounded"
-        >
-          Login
-        </button>
+          {/* Options */}
+          <div style={styles.options}>
+            <label>
+              <input type="checkbox" /> Remember
+            </label>
+            <span style={styles.forgot}>Forgot?</span>
+          </div>
 
-        <p className="text-sm mt-3">
-          Don’t have an account? Sign up
-        </p>
+          {/* Button */}
+          <button type="submit" style={styles.button}>
+            Login
+          </button>
+        </form>
       </div>
     </div>
   );
 }
+
+const styles = {
+  container: {
+    height: "100vh",
+    backgroundImage:
+      "url('https://images.unsplash.com/photo-1436491865332-7a61a109cc05')",
+    backgroundSize: "cover",
+    backgroundPosition: "center",
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+    position: "relative" as const,
+  },
+
+  overlay: {
+    position: "absolute" as const,
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+    backgroundColor: "rgba(0,0,0,0.4)",
+  },
+
+  box: {
+    position: "relative" as const,
+    width: "350px",
+    backgroundColor: "#fff",
+    padding: "25px",
+    borderRadius: "12px",
+    boxShadow: "0 10px 25px rgba(0,0,0,0.3)",
+  },
+
+  title: {
+    textAlign: "center" as const,
+    marginBottom: "15px",
+  },
+
+  form: {
+    display: "flex",
+    flexDirection: "column" as const,
+    gap: "12px", // ✅ spacing fix
+  },
+
+  input: {
+    padding: "10px",
+    borderRadius: "6px",
+    border: "1px solid #ccc",
+    fontSize: "14px",
+  },
+
+  options: {
+    display: "flex",
+    justifyContent: "space-between",
+    fontSize: "14px",
+  },
+
+  forgot: {
+    color: "blue",
+    cursor: "pointer",
+  },
+
+  button: {
+    padding: "10px",
+    borderRadius: "6px",
+    border: "none",
+    backgroundColor: "#4f46e5",
+    color: "#fff",
+    cursor: "pointer",
+  },
+};
